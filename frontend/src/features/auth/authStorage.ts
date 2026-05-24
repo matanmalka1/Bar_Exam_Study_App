@@ -31,5 +31,4 @@ export const setAccessToken = (token: string | null): void => {
   writeStored(ACCESS_TOKEN_KEY, token);
 };
 
-export const clearAccessToken = (): void => setAccessToken(null);
 export const clearTokens = (): void => setAccessToken(null);

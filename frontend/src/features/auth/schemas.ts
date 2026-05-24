@@ -12,7 +12,7 @@ export const LoginRequestSchema = z.object({
   password: z.string().min(1, "סיסמה היא שדה חובה").max(128),
 });
 
-export const passwordSchema = z
+const passwordSchema = z
   .string()
   .min(8, "הסיסמה חייבת להכיל לפחות 8 תווים")
   .max(128)

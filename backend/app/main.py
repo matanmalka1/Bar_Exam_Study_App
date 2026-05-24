@@ -11,7 +11,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from app.auth.api.routes import router as auth_router
-from app.core.config import CORS_ORIGINS, STATIC_DIR, settings
+from app.core.config import settings
 from app.core.exception_handlers import register_exception_handlers
 from app.core.logging_config import configure_logging
 from app.core.rate_limit import limiter, rate_limit_exceeded_handler
@@ -36,7 +36,7 @@ register_exception_handlers(app)
 # RequestID → RequestLogging → CORS → route
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=CORS_ORIGINS,
+    allow_origins=settings.cors_origins_list(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -67,8 +67,8 @@ app.include_router(stats_router, prefix="/api/v1")
 app.include_router(users_router, prefix="/api/v1")
 
 # SPA serving — MUST be last (catch-all swallows routes defined after it)
-if STATIC_DIR and Path(STATIC_DIR).is_dir():
-    static_path = Path(STATIC_DIR)
+if settings.STATIC_DIR and Path(settings.STATIC_DIR).is_dir():
+    static_path = Path(settings.STATIC_DIR)
     assets_path = static_path / "assets"
     index_html = static_path / "index.html"
 
@@ -76,5 +76,5 @@ if STATIC_DIR and Path(STATIC_DIR).is_dir():
         app.mount("/assets", StaticFiles(directory=str(assets_path)), name="assets")
 
     @app.get("/{full_path:path}", include_in_schema=False)
-    def spa_fallback(full_path: str) -> FileResponse:  # noqa: ARG001
+    def spa_fallback(_: str) -> FileResponse:
         return FileResponse(str(index_html))
