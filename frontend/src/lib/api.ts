@@ -5,7 +5,6 @@ import axios, {
 import {
   clearTokens,
   getAccessToken,
-  getRefreshToken,
   setAccessToken,
 } from "../features/auth/authStorage";
 
@@ -61,9 +60,7 @@ type RetriableConfig = InternalAxiosRequestConfig & { _retry?: boolean };
 let refreshPromise: Promise<string> | null = null;
 
 const requestNewAccessToken = async (): Promise<string> => {
-  const res = await api.post<{ access_token: string }>("/auth/refresh", {
-    refresh_token: getRefreshToken(),
-  });
+  const res = await api.post<{ access_token: string }>("/auth/refresh");
   return (res.data as { access_token: string }).access_token;
 };
 

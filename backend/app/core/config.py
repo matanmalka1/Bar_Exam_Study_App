@@ -61,6 +61,9 @@ class Settings(BaseSettings):
     SENTRY_ENVIRONMENT: str = "development"
     SENTRY_TRACES_SAMPLE_RATE: float = 0.0
 
+    # ── static / SPA ──────────────────────────────────────────────────────────
+    STATIC_DIR: str = ""
+
     # ── rate limiting ────────────────────────────────────────────────────────
     RATE_LIMIT_ENABLED: bool = True
     RATE_LIMIT_STORAGE_URI: str = "memory://"
@@ -128,6 +131,8 @@ BREVO_TEMPLATE_PASSWORD_RESET = settings.BREVO_TEMPLATE_PASSWORD_RESET
 
 RATE_LIMIT_ENABLED = settings.RATE_LIMIT_ENABLED
 RATE_LIMIT_STORAGE_URI = settings.RATE_LIMIT_STORAGE_URI
+
+STATIC_DIR = settings.STATIC_DIR
 
 LOG_LEVEL = settings.LOG_LEVEL
 OBSERVABILITY_JSON_LOGS = settings.OBSERVABILITY_JSON_LOGS

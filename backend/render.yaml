@@ -6,7 +6,12 @@ services:
     plan: free
     branch: main
     autoDeploy: true
-    buildCommand: pip install -r requirements.txt
+    buildCommand: >
+      pip install -r requirements.txt &&
+      cd ../frontend &&
+      npm install &&
+      npm run build &&
+      cp -r dist ../backend/static
     startCommand: alembic upgrade head && python scripts/import_questions.py --input-dir outputs && uvicorn app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
@@ -14,6 +19,8 @@ services:
         sync: false
       - key: CORS_ORIGINS
         sync: false
+      - key: STATIC_DIR
+        value: /opt/render/project/src/backend/static
       - key: AUTH_SECRET_KEY
         generateValue: true
       - key: AUTH_ALGORITHM
@@ -29,7 +36,7 @@ services:
       - key: REFRESH_COOKIE_SECURE
         value: "true"
       - key: REFRESH_COOKIE_SAMESITE
-        value: none
+        value: lax
       - key: PASSWORD_RESET_TOKEN_EXPIRE_MINUTES
         value: "30"
       - key: FRONTEND_PASSWORD_RESET_URL
